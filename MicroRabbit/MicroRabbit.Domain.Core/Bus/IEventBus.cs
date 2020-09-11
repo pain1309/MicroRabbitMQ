@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace MicroRabbit.Domain.Core.Bus
 {
+    // An event bus allows publish/subscribe-style communication between microservices 
+    // without requiring the components to explicitly be aware of each other
     public interface IEventBus
     {
         Task SendCommand<T>(T command) where T : Command;
 
         void Publish<T>(T @event) where T : Event;
-        // event type, event handler
+        // T: event type, TH: event handler
         void Subscribe<T, TH>() where T : Event where TH : IEventHandler<T>; 
     }
 }
