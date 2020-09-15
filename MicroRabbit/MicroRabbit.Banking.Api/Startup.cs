@@ -2,6 +2,7 @@
 using MediatR;
 using MicroRabbit.Banking.Data.Context;
 using MicroRabbit.Infra.IoC;
+using MicroRabbit.Transfer.Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,9 @@ namespace MicroRabbit.Banking.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<TransferDbContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("TransferDbConnection"));
+            });
             services.AddDbContext<BankingDbContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("BankingDbConnection"));
             });

@@ -13,6 +13,17 @@ namespace MicroRabbit.Banking.Data.Context
         }
 
         public DbSet<Account> Accounts { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+
+            IConfigurationRoot configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile(@Directory.GetCurrentDirectory() + "/../MicroRabbit.Banking.Api/appsettings.json").Build();
+            var builder = new DbContextOptionsBuilder<BankingDbContext>();
+            var connectionString = configuration.GetConnectionString("BankingDbConnection");
+            optionsBuilder.UseSqlServer(connectionString, options =>
+            {
+                options.MigrationsHistoryTable("__UsersMigrationsHistory", "Accounts");
+            });
+        }
     }
     // xử lý khi tầng chưa dbcontext k cùng với tầng khởi tạo service provider 
     // https://medium.com/oppr/net-core-using-entity-framework-core-in-a-separate-project-e8636f9dc9e5
